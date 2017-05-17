@@ -38,9 +38,8 @@ Thumbs.db
 
 # Notebook checkpoints #
 #######################
-.ipynb_checkpoints
 */.ipynb_checkpoints/*
 
-# CIFAR dataset        #
+# Datasets             #
 ########################
-cs231n/datasets/cifar-10-batches-py
+*/cs231n/datasets/*
