@@ -368,40 +368,37 @@ def conv_forward_naive(x, w, b, conv_param):
     W' = 1 + (W + 2 * pad - WW) / stride
   - cache: (x, w, b, conv_param)
   """
-  out = None
+  
   #############################################################################
   # TODO: Implement the convolutional forward pass.                           #
   # Hint: you can use the function np.pad for padding.                        #
   #############################################################################
-
+  
+  # Get the pad and stride
   pad = conv_param['pad']
   stride = conv_param['stride']
 
-  # Get number of filters
-  N = x.shape[0]
-  F = w.shape[0]
-  C = w.shape[1]
-  H = x.shape[2]
-  W = x.shape[3]
-  HH = w.shape[2]
-  WW = w.shape[3]
-  H_conv = 1+(H+2*pad-HH)/stride
-  W_conv = 1+(W+2*pad-WW)/stride
+  # Get dimensions
+  N, C, H, W = x.shape
+  F, _, HH, WW = w.shape
+  H_filter = 1+(H+2*pad-HH)/stride
+  W_filter = 1+(W+2*pad-WW)/stride
 
   # Initialize output matrix with zeros
-  out = np.zeros((N, F, H_conv, W_conv))
+  out = np.zeros((N, F, H_filter, W_filter))
 
-  # Choose padding for image
-  npad=((0,0),(0,0),(pad, pad),(pad, pad))
+  # Pad the image
+  npad = ((0,0), (0,0), (pad, pad), (pad, pad))
+
   # Pad the input image with zeros
-  x = np.pad(x, pad_width = npad, mode = 'constant', constant_values = 0)
+  x = np.pad(x, pad_width=npad, mode='constant', constant_values=0)
 
-  # Translate filters across the input
+  # Translate filters across the input image
   for i in range(N):
-      for z in range(F):
-          for j in range(H_conv):
-              for k in range(W_conv):
-                  out[i, z, j, k] = x[i,:,:,:].dot(w[z,:,:,:])+b[z]
+    for z in range(F):
+        for j in range(H_filter):
+            for k in range(W_filter):
+                out[i, z, j, k] = np.sum(x[i,:,j*stride:(j*stride+HH),k*stride:(k*stride+WW)]*w[z,:,:,:])+b[z]
 
   #############################################################################
   #                             END OF YOUR CODE                              #
