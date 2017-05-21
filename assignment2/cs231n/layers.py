@@ -420,15 +420,45 @@ def conv_backward_naive(dout, cache):
   - dw: Gradient with respect to w
   - db: Gradient with respect to b
   """
-  dx, dw, db = None, None, None
   #############################################################################
   # TODO: Implement the convolutional backward pass.                          #
   #############################################################################
-  pass
+  
+  # Unroll variables in cache
+  x, w, b, conv_param = cache
+
+  # Get the pad and stride
+  pad = conv_param['pad']
+  stride = conv_param['stride']
+
+  # Get dimensions
+  N, C, H, W = x.shape
+  F, _, HH, WW = w.shape
+  H_filter = dout.shape[2]
+  W_filter = dout.shape[3]
+    
+  # Initialize matrices for gradients
+  dx = np.zeros_like(x)
+  dw = np.zeros_like(w)
+  db = np.zeros_like(b)
+  
+  # Backpropagate dout through each image patch and each convolution filter
+  for i in range(N):
+    for z in range(F):
+        for j in range(H_filter):
+            h_start = j*stride
+            for k in range(W_filter):
+                w_start = k*stride
+                dx[i,:,h_start:(h_start+HH),w_start:(w_start+WW)] += w[z,:,:,:]*dout[i,z,j,k]
+                dw[z,:,:,:] += x[i,:,h_start:(h_start+HH),w_start:(w_start+WW)]*dout[i,z,j,k]
+                                
+  # Gradient with respect to the biases
+  db = dout.sum(axis=(0,2,3))
+
   #############################################################################
   #                             END OF YOUR CODE                              #
   #############################################################################
-  return dx, dw, db
+  return dx[:,:,pad:-pad,pad:-pad], dw, db
 
 
 def max_pool_forward_naive(x, pool_param):
