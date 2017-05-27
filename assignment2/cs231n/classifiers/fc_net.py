@@ -114,7 +114,7 @@ class TwoLayerNet(object):
              0.5*self.reg*np.sum(self.params['W2']*self.params['W2']))
     # Backpropagation until the first layer
     dhidden, grads['W2'], grads['b2'] = affine_backward(dscores,cache2)
-    dX, grads['W1'],grads['b1'] = affine_relu_backward(dhidden,cache1)
+    dX, grads['W1'], grads['b1'] = affine_relu_backward(dhidden,cache1)
     # Add regularization to the gradients
     grads['W1'] += self.reg*self.params['W1']
     grads['W2'] += self.reg*self.params['W2']
@@ -280,7 +280,7 @@ class FullyConnectedNet(object):
                                                   scores[i],
                                                   self.dropout_param
                                                   )
-                    
+
             else:
                 scores[i], cache[i] = affine_forward(
                                       scores[i-1],
