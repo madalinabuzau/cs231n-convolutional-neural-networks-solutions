@@ -51,13 +51,10 @@ class ThreeLayerConvNet(object):
     # Get input dimensions
     C, H, W = input_dim
 
-    # Compute convolution and max pooling filter dimensions
-    conv_param = {'stride': 1, 'pad': (filter_size - 1) / 2}
+    # Compute max pooling filter dimensions
     pool_param = {'pool_height': 2, 'pool_width': 2, 'stride': 2}
-    HC = (H+2*conv_param['pad']-filter_size)/conv_param['stride']+1
-    WC = (W+2*conv_param['pad']-filter_size)/conv_param['stride']+1
-    HP = (HC-pool_param['pool_height'])/pool_param['stride']+1
-    WP = (WC-pool_param['pool_width'])/pool_param['stride']+1
+    HP = (H-pool_param['pool_height'])/pool_param['stride']+1
+    WP = (W-pool_param['pool_width'])/pool_param['stride']+1
 
     # Set weights and biases dimension
     weigths_dim = [(num_filters, C, filter_size, filter_size),
@@ -101,6 +98,7 @@ class ThreeLayerConvNet(object):
     # computing the class scores for X and storing them in the scores          #
     # variable.                                                                #
     ############################################################################
+    #conv - relu - 2x2 max pool - affine - relu - affine - softmax
     # Convolutional pass
     conv_out, conv_cache = conv_forward_fast(X, W1, b1, conv_param)
 
@@ -117,7 +115,7 @@ class ThreeLayerConvNet(object):
     affine_relu, affine_relu_cache = relu_forward(affine_out)
 
     # Compute scores
-    scores, scores_cache = affine_forward(affine_out, W3, b3)
+    scores, scores_cache = affine_forward(affine_relu, W3, b3)
 
     ############################################################################
     #                             END OF YOUR CODE                             #
@@ -137,8 +135,7 @@ class ThreeLayerConvNet(object):
     loss, dout = softmax_loss(scores, y)
 
     # Add L2 regularization to the loss function
-    for i in range(1,4):
-        loss += 0.5*self.reg*np.sum(self.params['W%d' %i]*self.params['W%d' %i])
+    loss += 0.5*self.reg*(np.sum(W1*W1)+np.sum(W2*W2)+np.sum(W3*W3))
 
     # Backward through affine layer
     daffine, grads['W3'], grads['b3'] = affine_backward(dout, scores_cache)
@@ -159,9 +156,9 @@ class ThreeLayerConvNet(object):
     dX, grads['W1'], grads['b1'] = conv_backward_fast(dX, conv_cache)
 
     # Add regularization to the gradients
-    grads['W3'] += self.reg*grads['W3']
-    grads['W2'] += self.reg*grads['W2']
-    grads['W1'] += self.reg*grads['W1']
+    grads['W3'] += self.reg*W3
+    grads['W2'] += self.reg*W2
+    grads['W1'] += self.reg*W1
 
     ############################################################################
     #                             END OF YOUR CODE                             #
