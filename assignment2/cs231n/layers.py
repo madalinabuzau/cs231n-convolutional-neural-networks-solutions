@@ -586,18 +586,17 @@ def spatial_batchnorm_forward(x, gamma, beta, bn_param):
   # Get dimensions
   N, C, H, W = x.shape
 
-  # Initialize empty tensor for the output and dictionary for cache
-  out, cache = np.zeros((N,C,H*W)), {}
+  # Swap axes
+  x = np.swapaxes(x,0,1)
 
-  for i in range(C):
-      out[:,i,:], cache[i] = batchnorm_forward(x[:,i,:].reshape(N,-1), gamma[i],
-                                                beta[i], bn_param)
+  # Batchnorm through each channel separately
+  out, cache = batchnorm_forward(x.reshape(C,N*H*W).T, gamma, beta, bn_param)
 
   #############################################################################
   #                             END OF YOUR CODE                              #
   #############################################################################
 
-  return out.reshape(N,C,H,W), cache
+  return out.T.reshape(C,N,H,W).swapaxes(0,1), cache
 
 
 def spatial_batchnorm_backward(dout, cache):
@@ -623,18 +622,14 @@ def spatial_batchnorm_backward(dout, cache):
   # Get dimensions
   N, C, H, W = dout.shape
 
-  # Initialize empty gradients
-  dx, dgamma, dbeta = np.zeros((N,C,H*W)), np.zeros((C,H*W)), np.zeros((C,H*W))
-
   # Backpropagate through each channel
-  for i in range(C):
-      dx[:,i,:], dgamma[i,:], dbeta[i,:] = batchnorm_backward(dout[:,i,:].reshape(N,-1),cache[i])
+  dx, dgamma, dbeta = batchnorm_backward_alt(dout.swapaxes(0,1).reshape(C,-1).T, cache)
 
   #############################################################################
   #                             END OF YOUR CODE                              #
   #############################################################################
 
-  return dx.reshape(N,C,H,W), dgamma.sum(axis=1), dbeta.sum(axis=1)
+  return dx.T.reshape(C,N,H,W).swapaxes(0,1), dgamma, dbeta
 
 
 def svm_loss(x, y):
