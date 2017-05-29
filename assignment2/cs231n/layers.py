@@ -130,7 +130,7 @@ def batchnorm_forward(x, gamma, beta, bn_param):
     Input:
     - x: Data of shape (N, D)
     - gamma: Scale parameter of shape (D,)
-    - beta: Shift paremeter of shape (D,)
+    - beta: Shift parameter of shape (D,)
     - bn_param: Dictionary with the following keys:
       - mode: 'train' or 'test'; required
       - eps: Constant for numeric stability
@@ -167,7 +167,7 @@ def batchnorm_forward(x, gamma, beta, bn_param):
 
         sample_mean = np.mean(x, axis=0)
         sample_var = np.var(x, axis=0)
-        x_stand= (x - sample_mean.T) / np.sqrt(sample_var.T + eps)
+        x_stand = (x - sample_mean.T) / np.sqrt(sample_var.T + eps)
 
         out = x_stand * gamma + beta
 
@@ -576,7 +576,6 @@ def spatial_batchnorm_forward(x, gamma, beta, bn_param):
   - out: Output data, of shape (N, C, H, W)
   - cache: Values needed for the backward pass
   """
-  out, cache = None, None
 
   #############################################################################
   # TODO: Implement the forward pass for spatial batch normalization.         #
@@ -585,12 +584,21 @@ def spatial_batchnorm_forward(x, gamma, beta, bn_param):
   # version of batch normalization defined above. Your implementation should  #
   # be very short; ours is less than five lines.                              #
   #############################################################################
-  pass
+  # Get dimensions
+  N, C, H, W = x.shape
+
+  # Initialize empty tensor for the output and dictionary for cache
+  out, cache = np.zeros((N,C,H*W)), {}
+
+  for i in range(C):
+      out[:,i,:], cache[i] = batchnorm_forward(x[:,i,:].reshape(N,-1), gamma[i],
+                                                beta[i], bn_param)
+
   #############################################################################
   #                             END OF YOUR CODE                              #
   #############################################################################
 
-  return out, cache
+  return out.reshape(N,C,H,W), cache
 
 
 def spatial_batchnorm_backward(dout, cache):
