@@ -210,8 +210,6 @@ def batchnorm_backward(dout, cache):
     - dgamma: Gradient with respect to scale parameter gamma, of shape (D,)
     - dbeta: Gradient with respect to shift parameter beta, of shape (D,)
     """
-    dx, dgamma, dbeta = None, None, None
-
     ##########################################################################
     # TODO: Implement the backward pass for batch normalization. Store the      #
     # results in the dx, dgamma, and dbeta variables.                           #
@@ -228,6 +226,7 @@ def batchnorm_backward(dout, cache):
     dx = (1. / N) * gamma * (sample_var + eps)**(-1. / 2.) * (
          N * dout - np.sum(dout, axis=0) - (x - sample_mean) * (
          sample_var + eps)**(-1.0) * np.sum(dout * (x - sample_mean), axis=0))
+
     return dx, dgamma, dbeta
 
 
@@ -614,8 +613,6 @@ def spatial_batchnorm_backward(dout, cache):
   - dgamma: Gradient with respect to scale parameter, of shape (C,)
   - dbeta: Gradient with respect to shift parameter, of shape (C,)
   """
-  dx, dgamma, dbeta = None, None, None
-
   #############################################################################
   # TODO: Implement the backward pass for spatial batch normalization.        #
   #                                                                           #
@@ -623,12 +620,21 @@ def spatial_batchnorm_backward(dout, cache):
   # version of batch normalization defined above. Your implementation should  #
   # be very short; ours is less than five lines.                              #
   #############################################################################
-  pass
+  # Get dimensions
+  N, C, H, W = dout.shape
+
+  # Initialize empty gradients
+  dx, dgamma, dbeta = np.zeros((N,C,H*W)), np.zeros((C,H*W)), np.zeros((C,H*W))
+
+  # Backpropagate through each channel
+  for i in range(C):
+      dx[:,i,:], dgamma[i,:], dbeta[i,:] = batchnorm_backward(dout[:,i,:].reshape(N,-1),cache[i])
+
   #############################################################################
   #                             END OF YOUR CODE                              #
   #############################################################################
 
-  return dx, dgamma, dbeta
+  return dx.reshape(N,C,H,W), dgamma.sum(axis=1), dbeta.sum(axis=1)
 
 
 def svm_loss(x, y):
