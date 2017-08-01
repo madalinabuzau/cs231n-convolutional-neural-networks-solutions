@@ -44,3 +44,4 @@ Thumbs.db
 # Datasets             #
 ########################
 **/cs231n/datasets/*
+!**/cs231n/datasets/*.sh
