@@ -183,9 +183,13 @@ def batchnorm_forward(x, gamma, beta, bn_param):
         # and shift the normalized data using gamma and beta. Store the result in   #
         # the out variable.                                                         #
         #######################################################################
+
         x_stand = (x - running_mean) / np.sqrt(running_var)
         out = x_stand * gamma + beta
 
+        #######################################################################
+        #                          END OF YOUR CODE                           #
+        #######################################################################
     else:
         raise ValueError('Invalid forward batchnorm mode "%s"' % mode)
 
@@ -218,6 +222,7 @@ def batchnorm_backward(dout, cache):
     # should be able to compute gradients with respect to the inputs in a       #
     # single statement; our implementation fits on a single 80-character line.  #
     ##########################################################################
+
     sample_mean, sample_var, x_stand, x, gamma, beta, eps = cache
     N, D = dout.shape
 
@@ -226,6 +231,10 @@ def batchnorm_backward(dout, cache):
     dx = (1. / N) * gamma * (sample_var + eps)**(-1. / 2.) * (
          N * dout - np.sum(dout, axis=0) - (x - sample_mean) * (
          sample_var + eps)**(-1.0) * np.sum(dout * (x - sample_mean), axis=0))
+
+    ###########################################################################
+    #                             END OF YOUR CODE                            #
+    ###########################################################################
 
     return dx, dgamma, dbeta
 
@@ -250,6 +259,7 @@ def batchnorm_backward_alt(dout, cache):
     # should be able to compute gradients with respect to the inputs in a       #
     # single statement; our implementation fits on a single 80-character line.  #
     ##########################################################################
+
     sample_mean, sample_var, x_stand, x, gamma, beta, eps = cache
     N, D = dout.shape
 
@@ -258,6 +268,10 @@ def batchnorm_backward_alt(dout, cache):
     dx = (1. / N) * gamma * (sample_var + eps)**(-1. / 2.) * (
          N * dout - np.sum(dout, axis=0) - (x - sample_mean) * (
          sample_var + eps)**(-1.0) * np.sum(dout * (x - sample_mean), axis=0))
+
+    ###########################################################################
+    #                             END OF YOUR CODE                            #
+    ###########################################################################
 
     return dx, dgamma, dbeta
 
@@ -547,6 +561,7 @@ def max_pool_backward_naive(dout, cache):
                 idxs_max = np.where(input_patch==input_patch.max())
                 dpatch[idxs_max[0], idxs_max[1]] = dout[i,z,j,k]
                 dx[i,z,j*stride:(j*stride+HH),k*stride:(k*stride+WW)] += dpatch
+
   #############################################################################
   #                             END OF YOUR CODE                              #
   #############################################################################
@@ -583,6 +598,7 @@ def spatial_batchnorm_forward(x, gamma, beta, bn_param):
   # version of batch normalization defined above. Your implementation should  #
   # be very short; ours is less than five lines.                              #
   #############################################################################
+
   # Get dimensions
   N, C, H, W = x.shape
 
@@ -690,7 +706,7 @@ def softmax_loss(x, y):
 def batch_relu_forward(x, w, b, gamma, beta, bn_param):
   """
   Convenience layer that performs an affine transform followed
-  by batchnorm and ReLU
+  by batchnorm and ReLU.
 
   Inputs:
   - x: Input to the affine layer
@@ -708,7 +724,7 @@ def batch_relu_forward(x, w, b, gamma, beta, bn_param):
 
 def batch_relu_backward(dout, cache):
   """
-  Backward pass for the affine-batchnorm-relu convenience layer
+  Backward pass for the affine-batchnorm-relu convenience layer.
   """
   fc_cache, batch_cache, relu_cache = cache
   da = relu_backward(dout, relu_cache)

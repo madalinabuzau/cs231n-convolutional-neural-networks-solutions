@@ -67,6 +67,7 @@ class ThreeLayerConvNet(object):
         self.params['W%d' %i] = np.random.normal(loc=0.0, scale=weight_scale,
                                                 size=weigths_dim[i-1])
         self.params['b%d' %i] = np.zeros(biases_dim[i-1])
+
     ############################################################################
     #                             END OF YOUR CODE                             #
     ############################################################################
@@ -98,6 +99,7 @@ class ThreeLayerConvNet(object):
     # computing the class scores for X and storing them in the scores          #
     # variable.                                                                #
     ############################################################################
+
     #conv - relu - 2x2 max pool - affine - relu - affine - softmax
     # Convolutional pass
     conv_out, conv_cache = conv_forward_fast(X, W1, b1, conv_param)
@@ -131,6 +133,7 @@ class ThreeLayerConvNet(object):
     # data loss using softmax, and make sure that grads[k] holds the gradients #
     # for self.params[k]. Don't forget to add L2 regularization!               #
     ############################################################################
+
     # Compute loss and gradient with respect to the softmax function
     loss, dout = softmax_loss(scores, y)
 
@@ -165,6 +168,3 @@ class ThreeLayerConvNet(object):
     ############################################################################
 
     return loss, grads
-
-
-pass
