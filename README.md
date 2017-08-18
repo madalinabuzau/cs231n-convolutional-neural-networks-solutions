@@ -1,4 +1,4 @@
-### Solutions for the Winter 2016 assignments of the Stanford CS class on Convolutional Neural Networks for Visual Recognition (CS231n)
+### Solutions for the 2016 and 2017 assignments of the Stanford CS class on Convolutional Neural Networks for Visual Recognition (CS231n)
 
 In this repo you can find my solutions for the [CS231n course](http://cs231n.github.io/) offered by Stanford on visual recognition. I thought it might be helpful for other fellow students to share them here.
 
