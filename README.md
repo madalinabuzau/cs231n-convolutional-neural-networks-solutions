@@ -14,7 +14,7 @@ Here you can find the lecture videos for the CS231n Winter 2016 course:
 
 And here are the lectures for the 2017 course:
 
-[<img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPSF-lx2zBA1-bCfZRDZYKZYhHIQfLRPCc_LFe4jMO3gv5Qma0Ag' width=300>](https://youtu.be/vT1JzLTH4G4 "CS231n 2016")
+[<img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPSF-lx2zBA1-bCfZRDZYKZYhHIQfLRPCc_LFe4jMO3gv5Qma0Ag' width=300>](https://youtu.be/vT1JzLTH4G4 "CS231n 2017")
 
 You can download the original assignments, without the solutions, here:
 * Assignment 1:
