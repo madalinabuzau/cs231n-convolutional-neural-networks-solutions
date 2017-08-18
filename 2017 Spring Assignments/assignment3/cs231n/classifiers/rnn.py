@@ -137,7 +137,24 @@ class CaptioningRNN(object):
         # defined above to store loss and gradients; grads[k] should give the      #
         # gradients for self.params[k].                                            #
         ############################################################################
-        pass
+        h0 = features.dot(W_proj) + b_proj
+        captions_in, cache_embedding = word_embedding_forward(captions_in, W_embed)
+        if self.cell_type=='rnn':
+            h, cache_hidden = rnn_forward(captions_in, h0, Wx, Wh, b)
+        elif self.cell_type=='lstm':
+            h, cache_hidden = lstm_forward(captions_in, h0, Wx, Wh, b)
+        scores, cache_vocab = temporal_affine_forward(h, W_vocab, b_vocab)
+        loss, dx = temporal_softmax_loss(scores, captions_out, mask, verbose=False)
+
+        # Compute gradients
+        dh, grads['W_vocab'], grads['b_vocab'] = temporal_affine_backward(dx, cache_vocab)
+        if self.cell_type=='rnn':
+            dx, dh0, grads['Wx'], grads['Wh'], grads['b'] = rnn_backward(dh, cache_hidden)
+        elif self.cell_type=='lstm':
+            dx, dh0, grads['Wx'], grads['Wh'], grads['b'] = lstm_backward(dh, cache_hidden)
+        grads['W_embed'] = word_embedding_backward(dx, cache_embedding)
+        grads['W_proj'] = np.dot(features.T, dh0)
+        grads['b_proj'] = np.sum(dh0, axis=0)
         ############################################################################
         #                             END OF YOUR CODE                             #
         ############################################################################
@@ -199,7 +216,20 @@ class CaptioningRNN(object):
         # functions; you'll need to call rnn_step_forward or lstm_step_forward in #
         # a loop.                                                                 #
         ###########################################################################
-        pass
+        current_h = features.dot(W_proj) + b_proj
+        current_c = np.zeros_like(current_h)
+        current_words = np.zeros(N, dtype=int)
+        current_words.fill(self._start)
+
+        for step in range(max_length):
+            embedded_words = W_embed[current_words,:]
+            if self.cell_type=='rnn':
+                current_h, cache = rnn_step_forward(embedded_words, current_h, Wx, Wh, b)
+            elif self.cell_type=='lstm':
+                current_h, current_c, cache = lstm_step_forward(embedded_words, current_h, current_c, Wx, Wh, b)
+            scores = np.dot(current_h, W_vocab) + b_vocab
+            captions[:, step] = np.argmax(scores, axis=1)
+            current_words = captions[:, step]
         ############################################################################
         #                             END OF YOUR CODE                             #
         ############################################################################

@@ -153,7 +153,6 @@ class CaptioningRNN(object):
     grads['W_embed'] = word_embedding_backward(dx, cache_embedding)
     grads['W_proj'] = np.dot(features.T, dh0)
     grads['b_proj'] = np.sum(dh0, axis=0)
-
     ############################################################################
     #                             END OF YOUR CODE                             #
     ############################################################################

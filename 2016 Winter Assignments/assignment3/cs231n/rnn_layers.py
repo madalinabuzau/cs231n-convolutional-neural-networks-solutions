@@ -135,7 +135,6 @@ def rnn_backward(dh, cache):
   # sequence of data. You should use the rnn_step_backward function that you   #
   # defined above.                                                             #
   ##############################################################################
-
   # Get dimensions
   N, T, H = dh.shape
   D = cache[0][0].shape[1]
@@ -209,7 +208,7 @@ def word_embedding_backward(dout, cache):
   Returns:
   - dW: Gradient of word embedding matrix, of shape (V, D).
   """
-
+  
   ##############################################################################
   # TODO: Implement the backward pass for word embeddings.                     #
   #                                                                            #
