@@ -10,11 +10,11 @@ You can find the course notes [here](http://cs231n.github.io/).
 
 Here you can find the lecture videos for the CS231n Winter 2016 course:
 
-[<img src='https://i.ytimg.com/vi/i1gGsE66b5s/maxresdefault.jpg' border='1' bordercolor='black' width=300>](https://youtu.be/NfnWJUyUJYU?list=PLkt2uSq6rBVctENoVBg1TpCC7OQi31AlC "CS231n 2016")
+[<img src='https://i.ytimg.com/vi/i1gGsE66b5s/maxresdefault.jpg' width=300>](https://youtu.be/NfnWJUyUJYU?list=PLkt2uSq6rBVctENoVBg1TpCC7OQi31AlC "CS231n 2016")
 
 And here are the lectures for the 2017 course:
 
-[<img src='https://i.ytimg.com/vi/vT1JzLTH4G4/hqdefault.jpg?sqp=-oaymwEXCPYBEIoBSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLBTA9IHOkFwELY4nMlJ-yC518jR7Q' border='1' bordercolor='black' width=300>](https://youtu.be/vT1JzLTH4G4 "CS231n 2016")
+[<img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPSF-lx2zBA1-bCfZRDZYKZYhHIQfLRPCc_LFe4jMO3gv5Qma0Ag' width=300>](https://youtu.be/vT1JzLTH4G4 "CS231n 2016")
 
 You can download the original assignments, without the solutions, here:
 * Assignment 1:
