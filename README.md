@@ -6,6 +6,8 @@ The solutions are for both courses:
 * CS231n Winter 2016
 * CS231n Spring 2017
 
+The Spring 2017 solutions use both deep learning frameworks: TensorFlow and PyTorch.
+
 You can find the course notes [here](http://cs231n.github.io/).
 
 Here you can find the lecture videos for the CS231n Winter 2016 course:
